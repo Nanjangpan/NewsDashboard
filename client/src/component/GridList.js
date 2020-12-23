@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
@@ -119,3 +120,5 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default GridList;
+=======
+>>>>>>> 8d86167 (test for route function)
