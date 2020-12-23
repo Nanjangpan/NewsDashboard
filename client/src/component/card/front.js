@@ -7,32 +7,40 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
-function Front() {
-  const classes = useStyles();
+const TitleText = (data) => {
+  const length = data.length;
+  if (length <= 42) {
+    return (
+      <Typography variant="subtitle1">{data}</Typography>
+    )
+  } else {
+    return (
+      <Typography variant="subtitle1">{data}...</Typography>
+    )
+  }
+}
 
+const Front = ({data}) => {
+  const classes = useStyles();
+  
   return (
     <Card className={classes.card}>
       <CardMedia
         className={classes.cardMedia}
-        image="https://source.unsplash.com/random"
-        title="Image title"
+        image={data.image_url}
       />
       <CardContent className={classes.cardContent}>
-        <Typography gutterBottom variant="h5" component="h2">
-          Heading
-        </Typography>
-        <Typography>
-          This is a media card. You can use this section to describe the content.
-        </Typography>
+          {/* <TitleText data={data.title}/> */}
+          <Typography variant="subtitle1">{data.title}</Typography>
       </CardContent>
-      <CardActions>
+      {/* <CardActions>
         <Button size="small" color="primary">
           View
         </Button>
         <Button size="small" color="primary">
           Edit
         </Button>
-      </CardActions>
+      </CardActions> */}
     </Card>
   );
 }
@@ -51,10 +59,11 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   cardMedia: {
-    paddingTop: '56.25%', // 16:9
+    paddingTop: '70%', // 16:9
   },
   cardContent: {
     flexGrow: 1,
+    textAlign: 'left',
   },
 }));
 
