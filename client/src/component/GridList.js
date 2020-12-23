@@ -16,12 +16,31 @@ const GridList = ({category}) => {
   const [datetime, setDatetime] = useState('20201202');
   const [image_url, setImage_url] = useState(null);
   const [title, setTitle] = useState(null);
+<<<<<<< HEAD
+=======
+  const [test, setTest] = useState(null);
+  useEffect(() => {
+    setCategory(category);
+    let items = [];
+    fetch(`${apiURL}/test/go?datetime=${datetime}`)
+      .then(response => response.json())
+      .then((data) => {
+        data.forEach((doc) => {
+          items.push({
+            datetime : doc.datatime,
+          })
+        })
+      });
+    setTest(items);
+  })
+>>>>>>> f720f34 ([feat] add Route component)
 
   return (
     <React.Fragment>
         <CssBaseline/>
           <main>
             <Typography>{currentCategory}</Typography>
+            <Typography>{test.datetime}</Typography>
             <Container className={classes.cardGrid} maxWidth="md">
               <Grid container spacing={4}>
                 {cards.map((card) => (
