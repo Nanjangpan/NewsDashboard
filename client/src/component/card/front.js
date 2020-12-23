@@ -31,7 +31,9 @@ const Front = ({data}) => {
       />
       <CardContent className={classes.cardContent}>
           {/* <TitleText data={data.title}/> */}
-          <Typography variant="subtitle1">{data.title}</Typography>
+          <Typography variant="subtitle1">
+            {data.title.length < 43 ? data.title : data.title.substring(0,41)+"..."}
+          </Typography>
       </CardContent>
       {/* <CardActions>
         <Button size="small" color="primary">
