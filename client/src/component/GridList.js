@@ -17,7 +17,10 @@ const GridList = ({category}) => {
   const [image_url, setImage_url] = useState(null);
   const [title, setTitle] = useState(null);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> b1eee6c (feat: add card flip function)
   const [test, setTest] = useState(null);
   useEffect(() => {
     setCategory(category);
@@ -28,7 +31,12 @@ const GridList = ({category}) => {
         setTest(data);
         })
   })
+<<<<<<< HEAD
 >>>>>>> f720f34 ([feat] add Route component)
+=======
+=======
+>>>>>>> fdc887c (feat: add card flip function)
+>>>>>>> b1eee6c (feat: add card flip function)
 
   return (
     <React.Fragment>
