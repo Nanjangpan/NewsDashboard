@@ -9,6 +9,7 @@ import Back from './card/Back';
 import Flippy, { FrontSide, BackSide } from 'react-flippy';
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const apiURL = "http://localhost:8000";
 
 const GridList = ({category}) => {
   const classes = useStyles();
@@ -38,6 +39,30 @@ const GridList = ({category}) => {
 >>>>>>> fdc887c (feat: add card flip function)
 >>>>>>> b1eee6c (feat: add card flip function)
 
+  const _getLiveData = ({datetime}) => {
+    let items = [];
+    fetch('${apiURL}/test/go/')
+  }
+
+  useEffect(() => {
+    setCategory(category);
+    let items = [];
+    await fetch("test/go")
+      .then(response => response.json())
+      .then((data) => {
+        data.forEach((doc) => {
+          items.push({
+            image_url : doc.image_url,
+            title : doc.title,
+            url : doc.url,
+            keyword : doc.keyword,
+            press : doc.press,
+            title_list
+          })
+        })
+        
+      })
+  })
   return (
     <React.Fragment>
         <CssBaseline/>
