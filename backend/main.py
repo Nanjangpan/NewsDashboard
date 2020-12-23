@@ -1,7 +1,14 @@
 from fastapi import FastAPI
 import uvicorn
+from pydantic import BaseModel
+from pymongo import MongoClient
 
+from bson import ObjectId
 from starlette.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
+
+
 
 app = FastAPI()
 
@@ -19,13 +26,16 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-	return { "message" : "Hello World" }
+   return { "message" : "Hello World" }
 
-@app.get("/test")
-<<<<<<< HEAD
-<<<<<<< HEAD
-async def gogo(datetime:str,cate:str="Hot"):
-    return Hot_live_Data
+@app.exception_handler(StarletteHTTPException)
+async def custom_http_exception_handler(request, exc):
+    return RedirectResponse("/")
+#에러뜰경우 root로
+
+# @app.get("/test")
+# async def gogo(datetime:str,cate:str="Hot"):
+#     return Hot_live_Data
 
 # @app.get("cate/live/")
 # async def cate_live(datetime:str,cate:str="hot"):
@@ -47,35 +57,32 @@ async def gogo(datetime:str,cate:str="Hot"):
 # async def word_day(cate:str,datetime=str):
 #     print("fourth_route")
 #     return
-async def root():
-	return { "message" : "Hello World2" }
 
-async def gogo():
-    datetimes = "1234"
-    cates = "ad"
-    results = {"datetime" : datetimes, "cate" : cates}
-    return results
 
-@app.get("cate/live/")
-async def cate_live(datetime:str,cate:str="hot"):
-    print("first_route")
-    
-    return
 
-@app.get("cate/day")
-async def cate_day(datetime=str,cate:str="hot"):
-    print("second_route")
-    return
+client = MongoClient('localhost', 27017)
+#host,port
+db = client.dbname
+print('MongoDB Connected.')
 
-@app.get("word/live")
-async def word_live(cate:str,datetime=str):
-    print("third_route")
-    return
+@app.on_event("startup")
+async def startup_db_client():
+    client = MongoClient('localhost', 27017)
+    #host,port
+    db = client.dbname
+    print('MongoDB Connected.')
 
-@app.get("word/day")
-async def word_day(cate:str,datetime=str):
-    print("fourth_route")
-    return
+@app.on_event("shutdown")
+async def shutdown_db_client():
+    client.close()
+    print('MongoDB Closed.')
+
+# class User(BaseModel):
+#     _id: ObjectId
+#     name: str
+#     email: str
+#     username: str
+
 
 # @app.on_event("startup")
 # async def startup_db_client():
