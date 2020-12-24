@@ -16,7 +16,7 @@ import Moment from 'moment'
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const apiURL = "http://localhost:8000";
 
-const GridList = ({category}) => {
+const GridList = () => {
   const classes = useStyles();
   const currentDate = useSelector(state => state.currentBackground)
   const currentCategory = useSelector(state => state.currentCategory)
@@ -24,8 +24,7 @@ const GridList = ({category}) => {
   const [error, setError] = useState(null)
   const currentLiveData = useSelector(state => state.currentLiveData)
   const dispatch = useDispatch()
-  const [test, setTest] = useState(null)
-
+  
   const fetchData = async () => {
     try {
       setError(null);
@@ -37,7 +36,6 @@ const GridList = ({category}) => {
         }
       })
       dispatch(allActions.livedataActions.setLiveData(response.data))
-      setTest(response.data);
     } catch(e) {
       setError(e);
     }
@@ -74,7 +72,7 @@ const GridList = ({category}) => {
                         <Front data={card}/>
                       </FrontSide>
                       <BackSide>
-                        <Back data={card.title_list} />
+                        <Back data={card.title_list}/>
                       </BackSide>
                     </Flippy>
                   </Grid>

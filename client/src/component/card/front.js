@@ -6,23 +6,12 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-
-const TitleText = (data) => {
-  const length = data.length;
-  if (length <= 42) {
-    return (
-      <Typography variant="subtitle1">{data}</Typography>
-    )
-  } else {
-    return (
-      <Typography variant="subtitle1">{data}...</Typography>
-    )
-  }
-}
+import {BrowserRouter, Route, Link} from 'react-router-dom';
+import {ButtonGroup} from '@material-ui/core';
 
 const Front = ({data}) => {
   const classes = useStyles();
-  
+
   return (
     <Card className={classes.card}>
       <CardMedia
@@ -30,19 +19,11 @@ const Front = ({data}) => {
         image={data.image_url}
       />
       <CardContent className={classes.cardContent}>
-          {/* <TitleText data={data.title}/> */}
-          <Typography variant="subtitle1">
-            {data.title.length < 43 ? data.title : data.title.substring(0,41)+"..."}
-          </Typography>
+        <a href={data.url}>
+          {data.title.length < 43 ? data.title : data.title.substring(0,41)+"..."}
+        </a> 
+        <Typography variant='body2' align='right' color='textSecondary'>{data.press}</Typography>
       </CardContent>
-      {/* <CardActions>
-        <Button size="small" color="primary">
-          View
-        </Button>
-        <Button size="small" color="primary">
-          Edit
-        </Button>
-      </CardActions> */}
     </Card>
   );
 }
