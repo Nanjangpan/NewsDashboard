@@ -71,7 +71,7 @@ const App = () => {
           </div>
         </main>
       </React.Fragment>
-      <GridList category={currentCategory.category}/>
+      <GridList/>
       <Copyright/>
       {
         currentUser.loggedIn ? 
