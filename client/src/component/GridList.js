@@ -12,7 +12,7 @@ import axios from "axios";
 import {useSelector, useDispatch} from 'react-redux'
 import allActions from '../actions'
 import Moment from 'moment'
-
+import Button from '@material-ui/core/Button';
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const apiURL = "http://localhost:8000";
 
@@ -24,6 +24,7 @@ const GridList = () => {
   const [error, setError] = useState(null)
   const currentLiveData = useSelector(state => state.currentLiveData)
   const dispatch = useDispatch()
+  const [deleteItem, setDeleteItem] = useState(null);
   
   const fetchData = async () => {
     try {
@@ -33,6 +34,7 @@ const GridList = () => {
         params : {
           datetime : Moment(currentDate.date).format('YYYY-MM-DD'),
           cate : currentCategory.category,
+          deleteItem : deleteItem,
         }
       })
       dispatch(allActions.livedataActions.setLiveData(response.data))
@@ -44,7 +46,8 @@ const GridList = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+    setDeleteItem(null);
+  }, [currentDate, currentCategory, deleteItem]);
   
   if (loading) return <div>로딩중..</div>;
   if (error) return <div>에러가 발생했습니다.</div>;
@@ -59,7 +62,11 @@ const GridList = () => {
               <Grid container spacing={4}>
                 {currentLiveData.data.map((card) => (
                   <Grid item key={card.cluster_num} xs={12} sm={6} md={4}>
-                    <Typography>{card.title}</Typography>
+                    <Grid container direction="row">
+                      {card.keyword.map((tag) => (
+                        <Typography>#{tag}&nbsp;&nbsp;</Typography>
+                      ))}
+                     </Grid>
                     <Flippy className={classes.card}
                       flipOnHover={false} // default false
                       flipOnClick={true} // default false
@@ -68,13 +75,16 @@ const GridList = () => {
                       // and other props, which will go to div
                       // these are optional style, it is not necessary
                     >
+                    
                       <FrontSide>
                         <Front data={card}/>
+                        <Button className={classes.button} variant="contained" onClick={()=>{setDeleteItem(card.cluster_num)}}>관심 없음</Button>
                       </FrontSide>
                       <BackSide>
                         <Back data={card.title_list}/>
                       </BackSide>
                     </Flippy>
+                    
                   </Grid>
                 ))}
               </Grid>          
@@ -87,6 +97,9 @@ const GridList = () => {
 const useStyles = makeStyles((theme) => ({
   icon: {
     marginRight: theme.spacing(2),
+  },
+  button: {
+    marginTop: theme.spacing(1),
   },
   cardGrid: {
     paddingTop: theme.spacing(8),

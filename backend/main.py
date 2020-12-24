@@ -450,7 +450,7 @@ Hot_live_Data = [
                 'press' : "YBIGTA"
             },
         ], 
-    }
+    }   
 ]
 
 
@@ -478,8 +478,27 @@ async def custom_http_exception_handler(request, exc):
 #에러뜰경우 root로
 
 @app.get("/test")
-async def gogo(datetime:str,cate:str="Hot"):
-    return Hot_live_Data
+async def gogo(datetime:str,cate:str="Hot",deleteItem:str=False):
+    result=[]
+    if(deleteItem=="False"):
+        a=0
+        for i in Hot_live_Data:
+            if i['show']!='False':
+                result.append(i)
+            if a==9:
+                break
+        return result
+    else:
+        num=int(deleteItem)
+        Hot_live_Data[num-1]['show']='False'
+        a=0
+        for i in Hot_live_Data:
+            if i['show']!='False':
+                result.append(i)
+                a+=1
+            if a==9:
+                break
+        return result
 
 # @app.get("cate/live/")
 # async def cate_live(datetime:str,cate:str="hot"):

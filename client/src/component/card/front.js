@@ -6,12 +6,10 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import {BrowserRouter, Route, Link} from 'react-router-dom';
-import {ButtonGroup} from '@material-ui/core';
+
 
 const Front = ({data}) => {
   const classes = useStyles();
-
   return (
     <Card className={classes.card}>
       <CardMedia
@@ -19,7 +17,7 @@ const Front = ({data}) => {
         image={data.image_url}
       />
       <CardContent className={classes.cardContent}>
-        <a href={data.url}>
+        <a href={data.url} target="_blank">
           {data.title.length < 43 ? data.title : data.title.substring(0,41)+"..."}
         </a> 
         <Typography variant='body2' align='right' color='textSecondary'>{data.press}</Typography>
