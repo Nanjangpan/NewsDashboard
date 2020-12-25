@@ -1,24 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: crawler
+  name: back
   labels:
-    app: crawler
-  namespace: crawler
+    app: back
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
-      app: crawler
+      app: back
   template:
     metadata:
       labels:
-        app: crawler
+        app: back
     spec:
-      serviceAccountName: crawler
       containers:
-        - name: crawler
-          image: "532214462726.dkr.ecr.ap-northeast-2.amazonaws.com/crawler:dev"
+        - name: back
+          image: "532214462726.dkr.ecr.ap-northeast-2.amazonaws.com/backend:dev"
           imagePullPolicy: Always
           resources:
             limits:
