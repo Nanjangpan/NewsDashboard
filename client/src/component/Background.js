@@ -8,63 +8,99 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {NAVER_COLOR} from '../models/colors';
 import DayPicker from 'react-day-picker';
+import axios from "axios";
 import 'react-day-picker/lib/style.css';
 import Moment from 'react-moment';
 import {useSelector, useDispatch} from 'react-redux'
 import allActions from '../actions'
 
+const apiURL = "http://localhost:8000";
+
 function Background(){
-    const classes = useStyles(); 
-    const selectBack = useSelector(state => state.currentBackground)
-    const dispatch = useDispatch()
-    var day = new Date();
+  const classes = useStyles(); 
+  const currentBackground = useSelector(state => state.currentBackground)
+  const dispatch = useDispatch()
+  var day = new Date();
+  
+  const wordCloudData = async () => {
+    try {
+      const today = new Date();
+      today.setHours(today.getHours()+9);
+      if (currentBackground.date.getUTCDate() === today.getUTCDate() && 
+      currentBackground.date.getUTCMonth() === today.getUTCMonth() &&
+      currentBackground.date.getUTCFullYear() === today.getUTCFullYear()) {
+        const response = await axios.get(`${apiURL}/word/live`, {
+          params : {
+            datetime : Moment(currentBackground.date).format(), // "2015-06-15T00:00:00+09:00"
+          }
+        })
+        dispatch(allActions.backgroundActions.setWord(response.data))
+      } else if((currentBackground.date.getUTCDate() < today.getUTCDate() &&
+      currentBackground.date.getUTCMonth() === today.getUTCMonth() &&
+      currentBackground.date.getUTCFullYear() === today.getUTCFullYear()) || 
+        (currentBackground.date.getUTCMonth() < today.getUTCMonth() &&
+        currentBackground.date.getUTCFullYear() == today.getUTCFullYear()) ||
+        (currentBackground.date.getUTCFullYear() < today.getUTCFullYear())){
+        const response = await axios.get(`${apiURL}/word/day`, {
+          params : {
+            datetime : Moment(currentBackground.date).format('YYYY-MM-DD'),
+          }
+        })
+        dispatch(allActions.backgroundActions.setWord(response.data))
+      } else {
+        dispatch(allActions.alertActions.setWord(null));
+      }
+    } catch(e) {
+      console.log("워드 클라우드를 가져오는 데 실패했습니다.")
+    }
+  };
 
-    useEffect(() => {
-      dispatch(allActions.backgroundActions.setDate(day))
-      dispatch(allActions.backgroundActions.setWord(null))
-    }, [])
+  useEffect(() => {
+    dispatch(allActions.backgroundActions.setDate(day))
+    wordCloudData();
+  }, [])
 
-    return(
-        <>
-        <CssBaseline />
-        <AppBar position="relative" style={{ background: NAVER_COLOR }}>
-            <Toolbar>
-            <LibraryBooksIcon className={classes.icon} />
-            <Typography variant="h6" color="inherit" noWrap >YBIGTA NEWS DASHBOARD</Typography>
-            </Toolbar>
-        </AppBar>
-        <main>
-            <div className={classes.heroContent}>
-                <Container className={classes.flexdi} maxWidth="md">
-                    <Container className={classes.top_content}>
-                        <Typography component="h1" variant="h2" align='left' color="textPrimary" >
-                            Just Ten Minute
-                        </Typography>
-                        <div className={classes.wc}>
-                          {/* <ReactWordcloud words={words} options={options} /> */}
-                        </div>
-                    </Container>
-                    <Container className={classes.second_content}>
-                      <div>
-                        <DayPicker 
-                          onDayClick={(day) => dispatch(allActions.backgroundActions.setDate(day))} />
+  return(
+    <>
+      <CssBaseline />
+      <AppBar position="relative" style={{ background: NAVER_COLOR }}>
+          <Toolbar>
+          <LibraryBooksIcon className={classes.icon} />
+          <Typography variant="h6" color="inherit" noWrap >YBIGTA NEWS DASHBOARD</Typography>
+          </Toolbar>
+      </AppBar>
+      <main>
+          <div className={classes.heroContent}>
+              <Container className={classes.flexdi} maxWidth="md">
+                  <Container className={classes.top_content}>
+                      <Typography component="h1" variant="h2" align='left' color="textPrimary" >
+                          Just Ten Minute
+                      </Typography>
+                      <div className={classes.wc}>
+                        <Image src={currentBackground.word} aspectRatio={(16/9)} disableSpinner/>
                       </div>
-                    </Container>
-                </Container>
-                <Container maxWidth="md">
-                    <div className={classes.dateChild}>
-                      <Typography>
-                        <Moment format="YYYY년 MM월 DD일" date={selectBack.date} />
-                      </Typography>  
-                    </div>
+                  </Container>
+                  <Container className={classes.second_content}>
                     <div>
-                      <Typography align='right' color="textSecondary">오후 8시 30분 업데이트</Typography>
+                      <DayPicker 
+                        onDayClick={(day) => dispatch(allActions.backgroundActions.setDate(day))} />
                     </div>
-                </Container>              
-            </div>
-        </main>
-        </>
-    );
+                  </Container>
+              </Container>
+              <Container maxWidth="md">
+                  <div className={classes.dateChild}>
+                    <Typography>
+                      <Moment format="YYYY년 MM월 DD일" date={currentBackground.date} />
+                    </Typography>  
+                  </div>
+                  <div>
+                    <Typography align='right' color="textSecondary">오후 8시 30분 업데이트</Typography>
+                  </div>
+              </Container>              
+          </div>
+      </main>
+    </>
+  );
 }
 
 

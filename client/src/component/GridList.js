@@ -39,7 +39,7 @@ const GridList = () => {
         currentDate.date.getUTCFullYear() === today.getUTCFullYear()) {
         const response = await axios.get(`${apiURL}/cate/live_nine`, {
           params : {
-            datetime : Moment(currentDate.date).format('YYYY-MM-DD'),
+            datetime : Moment(currentDate.date).format(), // "2015-06-15T00:00:00+09:00"
             cate : currentCategory.category,
           }
         })
@@ -78,7 +78,7 @@ const GridList = () => {
       currentDate.date.getUTCFullYear() === today.getUTCFullYear()) {
         const response = await axios.get(`${apiURL}/cate/live`, {
           params : {
-            datetime : Moment(currentDate.date).format('YYYY-MM-DD'),
+            datetime : Moment(currentDate.date).format(), // "2015-06-15T00:00:00+09:00"
             cate : currentCategory.category,
           }
         })
