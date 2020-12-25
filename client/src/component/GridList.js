@@ -11,9 +11,10 @@ import Flippy, { FrontSide, BackSide } from 'react-flippy';
 import axios from "axios";
 import {useSelector, useDispatch} from 'react-redux'
 import allActions from '../actions'
-import Moment from 'moment'
+import Moment, { parseTwoDigitYear } from 'moment'
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup'
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 const apiURL = "http://localhost:8000";
 
@@ -24,6 +25,8 @@ const GridList = () => {
   const currentLiveData = useSelector(state => state.currentLiveData)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [dateerror, setDateError] = useState(false);
+
   const [bcolor1, setBColor1] = useState("secondary");
   const [bcolor2, setBColor2] = useState("inherit");
   const dispatch = useDispatch()
@@ -31,14 +34,36 @@ const GridList = () => {
   const fetchData = async () => {
     try {
       setError(null);
+      setDateError(false);
       setLoading(true);
-      const response = await axios.get(`${apiURL}/test`, {
-        params : {
-          datetime : Moment(currentDate.date).format('YYYY-MM-DD'),
-          cate : currentCategory.category,
-        }
-      })
-      dispatch(allActions.livedataActions.setLiveData(response.data))
+      const today = new Date();
+      today.setHours(today.getHours()+9);
+      if (currentDate.date.getUTCDate() === today.getUTCDate() && 
+        currentDate.date.getUTCMonth() === today.getUTCMonth() &&
+        currentDate.date.getUTCFullYear() === today.getUTCFullYear()) {
+        const response = await axios.get(`${apiURL}/cate/live_nine`, {
+          params : {
+            datetime : Moment(currentDate.date).format('YYYY-MM-DD'),
+            cate : currentCategory.category,
+          }
+        })
+        dispatch(allActions.livedataActions.setLiveData(response.data))
+      } else if((currentDate.date.getUTCDate() < today.getUTCDate() &&
+        currentDate.date.getUTCMonth() === today.getUTCMonth() &&
+        currentDate.date.getUTCFullYear() === today.getUTCFullYear()) || 
+        (currentDate.date.getUTCMonth() < today.getUTCMonth() &&
+        currentDate.date.getUTCFullYear() == today.getUTCFullYear()) ||
+        (currentDate.date.getUTCFullYear() < today.getUTCFullYear())){
+        const response = await axios.get(`${apiURL}/cate/day_nine`, {
+          params : {
+            datetime : Moment(currentDate.date).format('YYYY-MM-DD'),
+            cate : currentCategory.category,
+          }
+        })
+        dispatch(allActions.livedataActions.setLiveData(response.data))
+      } else {
+        setDateError(true);
+      }
     } catch(e) {
       setError(e);
     }
@@ -48,14 +73,37 @@ const GridList = () => {
   const fetchDataAll = async () => {
     try {
       setError(null);
+      setDateError(false);
       setLoading(true);
-      const response = await axios.get(`${apiURL}/tests`, {
-        params : {
-          datetime : Moment(currentDate.date).format('YYYY-MM-DD'),
-          cate : currentCategory.category,
-        }
-      })
-      dispatch(allActions.livedataActions.setLiveDataAll(response.data))
+      const today = new Date();
+      today.setHours(today.getHours()+9);
+      if (currentDate.date.getUTCDate() === today.getUTCDate() &&
+      currentDate.date.getUTCMonth() === today.getUTCMonth() &&
+      currentDate.date.getUTCFullYear() === today.getUTCFullYear()) {
+        const response = await axios.get(`${apiURL}/cate/live`, {
+          params : {
+            datetime : Moment(currentDate.date).format('YYYY-MM-DD'),
+            cate : currentCategory.category,
+          }
+        })
+        dispatch(allActions.livedataActions.setLiveDataAll(response.data))
+      } else if ((currentDate.date.getUTCDate() < today.getUTCDate() &&
+        currentDate.date.getUTCMonth() === today.getUTCMonth() &&
+        currentDate.date.getUTCFullYear() === today.getUTCFullYear()) || 
+        (currentDate.date.getUTCMonth() < today.getUTCMonth() &&
+        currentDate.date.getUTCFullYear() == today.getUTCFullYear()) ||
+        (currentDate.date.getUTCFullYear() < today.getUTCFullYear())){
+        const response = await axios.get(`${apiURL}/cate/day`, {
+          params : {
+            datetime : Moment(currentDate.date).format('YYYY-MM-DD'),
+            cate : currentCategory.category,
+          }
+        })
+        dispatch(allActions.livedataActions.setLiveDataAll(response.data))
+      } else {
+        setDateError(true);
+      }
+      
     } catch(e) {
       setError(e);
     }
@@ -81,7 +129,22 @@ const GridList = () => {
 
   if (loading) return <div>로딩중..</div>;
   if (error) return <div>에러가 발생했습니다.</div>;
-  if (!currentLiveData.data) return <div>데이터가 없습니다.</div>;
+  if (dateerror) return(
+    <Container maxWidth="md" align="center" className={classes.alertstyle}>
+      <Alert severity="error" variant="filled" >
+        <AlertTitle>Error</AlertTitle>
+        날짜가 유효하지 않습니다. <strong>다시 선택해주시기 바랍니다.</strong>
+      </Alert>
+    </Container>
+  );
+  if (!currentLiveData.data) return (
+    <Container maxWidth="md" align="center" className={classes.alertstyle}>
+      <Alert severity="warning" variant="filled" >
+        <AlertTitle>Warning</AlertTitle>
+        데이터가 없습니다. <strong>2020년 12월 23일 이후로 다시 선택해주시기 바랍니다.</strong>
+      </Alert>
+    </Container>
+  );
 
   return (
     
@@ -151,8 +214,15 @@ const useStyles = makeStyles((theme) => ({
   },
   buttongroup: {
     marginTop: theme.spacing(2),
-    
   },
+  alertstyle: {
+    marginTop: theme.spacing(2),
+    width: '100%',
+    alignItems: 'center',
+    '& > * + *': {
+      marginTop: theme.spacing(2),
+    },
+  }
 }));
 
 export default GridList;
