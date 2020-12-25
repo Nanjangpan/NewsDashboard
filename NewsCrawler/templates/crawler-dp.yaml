@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crawler
+  labels:
+    app: crawler
+  namespace: crawler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crawler
+  template:
+    metadata:
+      labels:
+        app: crawler
+    spec:
+      serviceAccountName: crawler
+      containers:
+        - name: crawler
+          image: "532214462726.dkr.ecr.ap-northeast-2.amazonaws.com/crawler:dev"
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: "{{ .Values.cpuLimits }}"
+              memory: "{{ .Values.memoryLimits }}"
+            requests:
+              cpu: "{{ .Values.cpuRequests }}"
+              memory: "{{ .Values.memoryRequests }}"
+          lifecycle:
+            preStop:
+              exec:
+                command: [
+                  # Introduce a delay to the shutdown sequence to wait for the
+                  # pod eviction event to propagate. Then, gracefully shutdown
+                  "sh", "-c", "sleep 5",
+                ]

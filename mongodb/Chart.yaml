@@ -1,0 +1,9 @@
+apiVersion: v1
+name: MongoDB
+description: MongoDB for Ybigta Project 'just 10 minutes'
+
+type: application
+
+version: "0.1.0"
+
+appVersion: "0.1.0"

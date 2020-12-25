@@ -1,0 +1,9 @@
+apiVersion: v1
+name: crawler
+description: collect real-time naver news and send to postgres and mongodb
+
+type: application
+
+version: "0.1.0"
+
+appVersion: "0.1.0"
