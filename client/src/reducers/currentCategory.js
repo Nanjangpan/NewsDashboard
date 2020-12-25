@@ -5,6 +5,11 @@ const currentCategory = (state = {}, action) => {
                 ...state,
                 category: action.category,
             }
+        case "SET_CATE_INDEX":
+            return {
+                ...state,
+                cateindex: action.cateindex
+            }
         default:
             return state
     }

@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState  } from 'react';
+import React, { useEffect } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -23,19 +23,15 @@ const GridList = () => {
   const currentDate = useSelector(state => state.currentBackground)
   const currentCategory = useSelector(state => state.currentCategory)
   const currentLiveData = useSelector(state => state.currentLiveData)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
-  const [dateerror, setDateError] = useState(false);
-
-  const [bcolor1, setBColor1] = useState("secondary");
-  const [bcolor2, setBColor2] = useState("inherit");
+  const alert = useSelector(state => state.alert)
+  const currentButtonColor = useSelector(state => state.currentButtonColor)
   const dispatch = useDispatch()
 
   const fetchData = async () => {
     try {
-      setError(null);
-      setDateError(false);
-      setLoading(true);
+      dispatch(allActions.alertActions.setLoading(true));
+      dispatch(allActions.alertActions.setError(null));
+      dispatch(allActions.alertActions.setDateError(false));
       const today = new Date();
       today.setHours(today.getHours()+9);
       if (currentDate.date.getUTCDate() === today.getUTCDate() && 
@@ -62,19 +58,19 @@ const GridList = () => {
         })
         dispatch(allActions.livedataActions.setLiveData(response.data))
       } else {
-        setDateError(true);
+        dispatch(allActions.alertActions.setDateError(true));
       }
     } catch(e) {
-      setError(e);
+      dispatch(allActions.alertActions.setError(e));
     }
-    setLoading(false);
+    dispatch(allActions.alertActions.setLoading(false));
   };
 
   const fetchDataAll = async () => {
     try {
-      setError(null);
-      setDateError(false);
-      setLoading(true);
+      dispatch(allActions.alertActions.setLoading(true));
+      dispatch(allActions.alertActions.setError(null));
+      dispatch(allActions.alertActions.setDateError(false));
       const today = new Date();
       today.setHours(today.getHours()+9);
       if (currentDate.date.getUTCDate() === today.getUTCDate() &&
@@ -101,24 +97,23 @@ const GridList = () => {
         })
         dispatch(allActions.livedataActions.setLiveDataAll(response.data))
       } else {
-        setDateError(true);
+        dispatch(allActions.alertActions.setDateError(true));
       }
-      
     } catch(e) {
-      setError(e);
+      dispatch(allActions.alertActions.setError(e));
     }
-    setLoading(false);
+    dispatch(allActions.alertActions.setLoading(false));
   };
 
   const handleClick1 = () => {
-    setBColor1("secondary");
-    setBColor2("inherit");
+    dispatch(allActions.buttoncolorActions.setNineButtonColor('secondary'));
+    dispatch(allActions.buttoncolorActions.setAllButtonColor('inherit'));
     fetchData();
   };
 
   const handleClick2 = () => {
-    setBColor1("inherit");
-    setBColor2("secondary");
+    dispatch(allActions.buttoncolorActions.setNineButtonColor('inherit'));
+    dispatch(allActions.buttoncolorActions.setAllButtonColor('secondary'));
     fetchDataAll();
   };
 
@@ -127,9 +122,9 @@ const GridList = () => {
   }, [currentDate, currentCategory]);
   
 
-  if (loading) return <div>로딩중..</div>;
-  if (error) return <div>에러가 발생했습니다.</div>;
-  if (dateerror) return(
+  if (alert.load) return <div>로딩중..</div>;
+  if (alert.error) return <div>에러가 발생했습니다.</div>;
+  if (alert.dateerror) return(
     <Container maxWidth="md" align="center" className={classes.alertstyle}>
       <Alert severity="error" variant="filled" >
         <AlertTitle>Error</AlertTitle>
@@ -147,14 +142,13 @@ const GridList = () => {
   );
 
   return (
-    
     <React.Fragment>
         <CssBaseline/>
           <main>
             <Container maxWidth="md" align="left">
               <ButtonGroup className={classes.buttongroup} variant="contained" aria-label="split button">
-                <Button color={bcolor1} onClick={handleClick1}>9개만 보기</Button>
-                <Button color={bcolor2} onClick={handleClick2}>모두 보기</Button>
+                <Button color={currentButtonColor.nine_color} onClick={handleClick1}>9개만 보기</Button>
+                <Button color={currentButtonColor.all_color} onClick={handleClick2}>모두 보기</Button>
               </ButtonGroup>
             </Container>  
             <Container className={classes.cardGrid} maxWidth="md">
@@ -191,26 +185,12 @@ const GridList = () => {
 }
 
 const useStyles = makeStyles((theme) => ({
-  icon: {
-    marginRight: theme.spacing(2),
-  },
   button: {
     marginTop: theme.spacing(1),
   },
   cardGrid: {
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
-  },
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  cardMedia: {
-    paddingTop: '56.25%', // 16:9
-  },
-  cardContent: {
-    flexGrow: 1,
   },
   buttongroup: {
     marginTop: theme.spacing(2),
