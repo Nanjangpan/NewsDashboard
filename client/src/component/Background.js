@@ -44,7 +44,7 @@ function Background(){
                             Just Ten Minute
                         </Typography>
                         <div className={classes.wc}>
-                          <ReactWordcloud words={words} options={options} />
+                          {/* <ReactWordcloud words={words} options={options} /> */}
                         </div>
                     </Container>
                     <Container className={classes.second_content}>

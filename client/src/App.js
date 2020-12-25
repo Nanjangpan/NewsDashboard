@@ -1,47 +1,26 @@
 import React, {useEffect, useState} from 'react';
-import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { makeStyles } from '@material-ui/core/styles';
 import {useSelector, useDispatch} from 'react-redux'
 import './App.css';
 import allActions from './actions'
 import Background from './component/Background';
 import GridList from './component/GridList';
 import {Copyright} from './component/Copyright';
-import {NAVER_COLOR} from './models/colors';
-
-const CateButton = ({ classes, dispatch, setCategory, category, buttonName }) => {
-  if (buttonName === 'Hot'){
-    return (
-      <Button className={category === buttonName ? classes.selected : classes.hotButton}
-      onClick={()=> {
-        dispatch(allActions.categoryActions.setCategory(buttonName));
-        setCategory(buttonName);
-      }}>{buttonName}</Button>
-    );
-  } else {
-    return (
-      <Button className={category === buttonName ? classes.selected : classes.button}
-      onClick={()=> {
-        dispatch(allActions.categoryActions.setCategory(buttonName));
-        setCategory(buttonName);
-      }}>{buttonName}</Button>
-    );
-  }
-};
+import Paper from '@material-ui/core/Paper';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
 const App = () => {
-  const counter = useSelector(state => state.counter)
-  const currentUser = useSelector(state => state.currentUser)
   const currentCategory = useSelector(state => state.currentCategory)
   const [category, setCategory] = useState('Hot');
   const dispatch = useDispatch()
+  const [value, setValue] = useState(0);
 
-  const user = {name: "Rei"}
-  const classes = useStyles();
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   
   useEffect(() => {
-    dispatch(allActions.userActions.setUser(user))
     dispatch(allActions.categoryActions.setCategory(category))
   }, [category])
 
@@ -50,70 +29,53 @@ const App = () => {
       <Background/>
       <React.Fragment>
         <CssBaseline/>
-        <main>
-          <div className={classes.category}>
-            <CateButton classes={classes} dispatch={dispatch} setCategory={setCategory} category={category}
-              buttonName={'Hot'}/>
-            <CateButton classes={classes} dispatch={dispatch} setCategory={setCategory} category={category}
-              buttonName={'정치'}/>
-            <CateButton classes={classes} dispatch={dispatch} setCategory={setCategory} category={category}
-              buttonName={'경제'}/>
-            <CateButton classes={classes} dispatch={dispatch} setCategory={setCategory} category={category}
-              buttonName={'사회'}/>
-            <CateButton classes={classes} dispatch={dispatch} setCategory={setCategory} category={category}
-              buttonName={'생활문화'}/>
-            <CateButton classes={classes} dispatch={dispatch} setCategory={setCategory} category={category}
-              buttonName={'세계'}/>
-            <CateButton classes={classes} dispatch={dispatch} setCategory={setCategory} category={category}
-              buttonName={'IT과학'}/>
-            <CateButton classes={classes} dispatch={dispatch} setCategory={setCategory} category={category}
-              buttonName={'오피니언'}/>
-          </div>
-        </main>
+          <Paper>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              indicatorColor="primary"
+              textColor="primary"
+              centered={true}
+            >
+              <Tab label="Hot" onClick={()=> {
+                dispatch(allActions.categoryActions.setCategory("Hot"));
+                setCategory("Hot");
+              }}/>
+              <Tab label="정치" onClick={()=> {
+                dispatch(allActions.categoryActions.setCategory("정치"));
+                setCategory("정치");
+              }}/>
+              <Tab label="경제" onClick={()=> {
+                dispatch(allActions.categoryActions.setCategory("경제"));
+                setCategory("경제");
+              }}/>
+              <Tab label="사회" onClick={()=> {
+                dispatch(allActions.categoryActions.setCategory("사회"));
+                setCategory("사회");
+              }}/>
+              <Tab label="생활문화" onClick={()=> {
+                dispatch(allActions.categoryActions.setCategory("생활문화"));
+                setCategory("생활문화");
+              }}/>
+              <Tab label="세계" onClick={()=> {
+                dispatch(allActions.categoryActions.setCategory("세계"));
+                setCategory("세계");
+              }}/>
+              <Tab label="IT과학" onClick={()=> {
+                dispatch(allActions.categoryActions.setCategory("IT과학"));
+                setCategory("IT과학");
+              }}/>
+              <Tab label="오피니언" onClick={()=> {
+                dispatch(allActions.categoryActions.setCategory("오피니언"));
+                setCategory("오피니언");
+              }}/>
+            </Tabs>
+          </Paper>
+        <GridList/>
+        <Copyright/>
       </React.Fragment>
-      <GridList/>
-      <Copyright/>
-      {
-        currentUser.loggedIn ? 
-        <>
-          <h1>Hello, {currentUser.user.name}</h1>
-          <h1>Hello, {currentCategory.category}</h1>
-          <button onClick={() => dispatch(allActions.categoryActions.setCategory(category))}>Logout</button>
-        </> 
-        : 
-        <>
-          <h1>Login</h1>
-          <button onClick={() => dispatch(allActions.userActions.setUser(user))}>Login as Rei</button>
-        </>
-        }
-      <h1>Counter: {counter}</h1>
-      <button onClick={() => dispatch(allActions.counterActions.increment())}>Increase Counter</button>
-      <button onClick={() => dispatch(allActions.counterActions.decrement())}>Decrease Counter</button>
     </div>
   );
 }
-
-const useStyles = makeStyles((theme) => ({
-  icon: {
-    marginRight: theme.spacing(2),
-  },
-  category: {
-    backgroundColor: theme.palette.background.paper,
-    fontSize : '10px'
-  },
-  button: {
-    color : 'black',
-    fontWeight: 'bolder',
-  },
-  hotButton: {
-    color: "#f50057",
-    fontWeight: 'bolder',
-  },
-  selected: {
-    textDecorationLine : 'underline',
-    color: NAVER_COLOR,
-    fontWeight: 'bolder',
-  }
-}));
 
 export default App;

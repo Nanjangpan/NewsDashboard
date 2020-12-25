@@ -7,25 +7,26 @@ import Container from '@material-ui/core/Container';
 import Front from './card/Front';
 import Back from './card/Back';
 import Flippy, { FrontSide, BackSide } from 'react-flippy';
-import CardFrame from './card/CardFrame';
 import axios from "axios";
 import {useSelector, useDispatch} from 'react-redux'
 import allActions from '../actions'
 import Moment from 'moment'
 import Button from '@material-ui/core/Button';
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+import ButtonGroup from '@material-ui/core/ButtonGroup'
+
 const apiURL = "http://localhost:8000";
 
 const GridList = () => {
   const classes = useStyles();
   const currentDate = useSelector(state => state.currentBackground)
   const currentCategory = useSelector(state => state.currentCategory)
+  const currentLiveData = useSelector(state => state.currentLiveData)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const currentLiveData = useSelector(state => state.currentLiveData)
+  const [bcolor1, setBColor1] = useState("secondary");
+  const [bcolor2, setBColor2] = useState("inherit");
   const dispatch = useDispatch()
-  const [deleteItem, setDeleteItem] = useState(null);
-  
+
   const fetchData = async () => {
     try {
       setError(null);
@@ -34,7 +35,6 @@ const GridList = () => {
         params : {
           datetime : Moment(currentDate.date).format('YYYY-MM-DD'),
           cate : currentCategory.category,
-          deleteItem : deleteItem,
         }
       })
       dispatch(allActions.livedataActions.setLiveData(response.data))
@@ -44,11 +44,40 @@ const GridList = () => {
     setLoading(false);
   };
 
+  const fetchDataAll = async () => {
+    try {
+      setError(null);
+      setLoading(true);
+      const response = await axios.get(`${apiURL}/tests`, {
+        params : {
+          datetime : Moment(currentDate.date).format('YYYY-MM-DD'),
+          cate : currentCategory.category,
+        }
+      })
+      dispatch(allActions.livedataActions.setLiveDataAll(response.data))
+    } catch(e) {
+      setError(e);
+    }
+    setLoading(false);
+  };
+
+  const handleClick1 = () => {
+    setBColor1("secondary");
+    setBColor2("inherit");
+    fetchData();
+  };
+
+  const handleClick2 = () => {
+    setBColor1("inherit");
+    setBColor2("secondary");
+    fetchDataAll();
+  };
+
   useEffect(() => {
     fetchData();
-    setDeleteItem(null);
-  }, [currentDate, currentCategory, deleteItem]);
+  }, [currentDate, currentCategory]);
   
+
   if (loading) return <div>로딩중..</div>;
   if (error) return <div>에러가 발생했습니다.</div>;
   if (!currentLiveData.data) return <div>데이터가 없습니다.</div>;
@@ -58,6 +87,12 @@ const GridList = () => {
     <React.Fragment>
         <CssBaseline/>
           <main>
+            <Container maxWidth="md" align="left">
+              <ButtonGroup className={classes.buttongroup} variant="contained" aria-label="split button">
+                <Button color={bcolor1} onClick={handleClick1}>9개만 보기</Button>
+                <Button color={bcolor2} onClick={handleClick2}>모두 보기</Button>
+              </ButtonGroup>
+            </Container>  
             <Container className={classes.cardGrid} maxWidth="md">
               <Grid container spacing={4}>
                 {currentLiveData.data.map((card) => (
@@ -75,19 +110,16 @@ const GridList = () => {
                       // and other props, which will go to div
                       // these are optional style, it is not necessary
                     >
-                    
                       <FrontSide>
                         <Front data={card}/>
-                        <Button className={classes.button} variant="contained" onClick={()=>{setDeleteItem(card.cluster_num)}}>관심 없음</Button>
                       </FrontSide>
                       <BackSide>
                         <Back data={card.title_list}/>
                       </BackSide>
                     </Flippy>
-                    
                   </Grid>
                 ))}
-              </Grid>          
+              </Grid>         
             </Container>
           </main>
     </React.Fragment>
@@ -115,6 +147,10 @@ const useStyles = makeStyles((theme) => ({
   },
   cardContent: {
     flexGrow: 1,
+  },
+  buttongroup: {
+    marginTop: theme.spacing(2),
+    
   },
 }));
 
