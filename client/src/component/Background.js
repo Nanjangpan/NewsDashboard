@@ -13,6 +13,7 @@ import 'react-day-picker/lib/style.css';
 import Moment from 'react-moment';
 import {useSelector, useDispatch} from 'react-redux'
 import allActions from '../actions'
+import Image from 'material-ui-image';
 
 const apiURL = "http://localhost:8000";
 
