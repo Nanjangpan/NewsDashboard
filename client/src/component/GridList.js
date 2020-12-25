@@ -5,8 +5,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Front from './card/Front';
-import Back from './card/Back';
+import Front from './card/front';
+import Back from './card/back';
 import Flippy, { FrontSide, BackSide } from 'react-flippy';
 import axios from "axios";
 import {useSelector, useDispatch} from 'react-redux'
