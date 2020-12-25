@@ -5,8 +5,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Front from './card/Front';
-import Back from './card/Back';
+import Front from './card/front';
+import Back from './card/back';
 import Flippy, { FrontSide, BackSide } from 'react-flippy';
 import axios from "axios";
 import {useSelector, useDispatch} from 'react-redux'
@@ -16,7 +16,7 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 import { Alert, AlertTitle } from '@material-ui/lab';
 
-const apiURL = "http://localhost:8000";
+const apiURL = "http://k8s-default-backingr-2cc91ca44b-1343636340.ap-northeast-2.elb.amazonaws.com";
 
 const GridList = () => {
   const classes = useStyles();

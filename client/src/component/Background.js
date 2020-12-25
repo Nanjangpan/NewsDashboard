@@ -13,8 +13,9 @@ import 'react-day-picker/lib/style.css';
 import Moment from 'react-moment';
 import {useSelector, useDispatch} from 'react-redux'
 import allActions from '../actions'
+import Image from 'material-ui-image';
 
-const apiURL = "http://localhost:8000";
+const apiURL = "http://k8s-default-backingr-2cc91ca44b-1343636340.ap-northeast-2.elb.amazonaws.com";
 
 function Background(){
   const classes = useStyles(); 
