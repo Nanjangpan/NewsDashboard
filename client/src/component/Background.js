@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -18,10 +18,18 @@ import allActions from '../actions'
 function Background(){
     const classes = useStyles(); 
 
-    const selectDate = useSelector(state => state.currentBackground)
-    const dispatch = useDispatch()
+    const selectBack = useSelector(state => state.currentBackground)
 
-    const words = WORD;
+    const dispatch = useDispatch()
+    
+    var day = new Date();
+    var word = WORD
+
+    useEffect(() => {
+      dispatch(allActions.backgroundActions.setDate(day))
+      dispatch(allActions.backgroundActions.setWord(word))
+    }, [])
+
     const options = {
       rotations: 2,
       rotationAngles: [0, 0],
@@ -57,13 +65,12 @@ function Background(){
                 <Container maxWidth="md">
                     <div className={classes.dateChild}>
                       <Typography>
-                        <Moment format="YYYY년 MM월 DD일" date={selectDate.date} />
+                        <Moment format="YYYY년 MM월 DD일" date={selectBack.date} />
                       </Typography>  
                     </div>
                     <div>
                       <Typography align='right' color="textSecondary">오후 8시 30분 업데이트</Typography>
                     </div>
-                  {/* </Container> */}
                 </Container>
                 
             </div>
@@ -83,15 +90,15 @@ const useStyles = makeStyles((theme) => ({
     },
     flexdi: {
     //   flexDirection: 'row',
-        display:'flex',
+      display:'flex',
     },
     top_content: {
-        margin:"auto",
-        width:'65%',
+      margin:"auto",
+      width:'65%',
     },
     second_content: {
-        margin:"auto",
-        width:'35%',
+      margin:"auto",
+      width:'35%',
     },
     wc: {
       margin:"auto",  

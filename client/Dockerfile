@@ -9,4 +9,4 @@ RUN npm install
 
 COPY ./ ./
 
-CMD ["npm", "run", "start"]
+CMD ["PORT=8000", "npm", "run", "start"]
