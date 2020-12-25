@@ -7,7 +7,7 @@ const allActions = {
     counterActions,
     userActions,
     categoryActions,
-    backgroundActions
+    backgroundActions,
 }
 
 export default allActions
