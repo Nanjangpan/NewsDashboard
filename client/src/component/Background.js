@@ -8,10 +8,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {NAVER_COLOR} from '../models/colors';
 import DayPicker from 'react-day-picker';
+import axios from "axios";
 import 'react-day-picker/lib/style.css';
 import Moment from 'react-moment';
 import {useSelector, useDispatch} from 'react-redux'
 import allActions from '../actions'
+
+const apiURL = "http://localhost:8000";
 
 function Background(){
   const classes = useStyles(); 
@@ -23,26 +26,24 @@ function Background(){
     try {
       const today = new Date();
       today.setHours(today.getHours()+9);
-      if (currentDate.date.getUTCDate() === today.getUTCDate() && 
-        currentDate.date.getUTCMonth() === today.getUTCMonth() &&
-        currentDate.date.getUTCFullYear() === today.getUTCFullYear()) {
+      if (currentBackground.date.getUTCDate() === today.getUTCDate() && 
+      currentBackground.date.getUTCMonth() === today.getUTCMonth() &&
+      currentBackground.date.getUTCFullYear() === today.getUTCFullYear()) {
         const response = await axios.get(`${apiURL}/word/live`, {
           params : {
-            datetime : Moment(currentDate.date).format(), // "2015-06-15T00:00:00+09:00"
-            cate : currentCategory.category,
+            datetime : Moment(currentBackground.date).format(), // "2015-06-15T00:00:00+09:00"
           }
         })
         dispatch(allActions.backgroundActions.setWord(response.data))
-      } else if((currentDate.date.getUTCDate() < today.getUTCDate() &&
-        currentDate.date.getUTCMonth() === today.getUTCMonth() &&
-        currentDate.date.getUTCFullYear() === today.getUTCFullYear()) || 
-        (currentDate.date.getUTCMonth() < today.getUTCMonth() &&
-        currentDate.date.getUTCFullYear() == today.getUTCFullYear()) ||
-        (currentDate.date.getUTCFullYear() < today.getUTCFullYear())){
+      } else if((currentBackground.date.getUTCDate() < today.getUTCDate() &&
+      currentBackground.date.getUTCMonth() === today.getUTCMonth() &&
+      currentBackground.date.getUTCFullYear() === today.getUTCFullYear()) || 
+        (currentBackground.date.getUTCMonth() < today.getUTCMonth() &&
+        currentBackground.date.getUTCFullYear() == today.getUTCFullYear()) ||
+        (currentBackground.date.getUTCFullYear() < today.getUTCFullYear())){
         const response = await axios.get(`${apiURL}/word/day`, {
           params : {
-            datetime : Moment(currentDate.date).format('YYYY-MM-DD'),
-            cate : currentCategory.category,
+            datetime : Moment(currentBackground.date).format('YYYY-MM-DD'),
           }
         })
         dispatch(allActions.backgroundActions.setWord(response.data))
@@ -76,7 +77,7 @@ function Background(){
                           Just Ten Minute
                       </Typography>
                       <div className={classes.wc}>
-                        {/* <ReactWordcloud words={words} options={options} /> */}
+                        <Image src={currentBackground.word} aspectRatio={(16/9)} disableSpinner/>
                       </div>
                   </Container>
                   <Container className={classes.second_content}>
