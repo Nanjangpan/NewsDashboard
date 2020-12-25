@@ -9,31 +9,21 @@ import Container from '@material-ui/core/Container';
 import {NAVER_COLOR} from '../models/colors';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
-import {WORD} from './Word';
 import Moment from 'react-moment';
 import {useSelector, useDispatch} from 'react-redux'
 import allActions from '../actions'
 
 function Background(){
     const classes = useStyles(); 
-
     const selectBack = useSelector(state => state.currentBackground)
-
     const dispatch = useDispatch()
-    
     var day = new Date();
-    var word = WORD
 
     useEffect(() => {
       dispatch(allActions.backgroundActions.setDate(day))
-      dispatch(allActions.backgroundActions.setWord(word))
+      dispatch(allActions.backgroundActions.setWord(null))
     }, [])
 
-    const options = {
-      rotations: 2,
-      rotationAngles: [0, 0],
-      fontSizes:[50,100],
-    };
     return(
         <>
         <CssBaseline />
@@ -87,7 +77,6 @@ const useStyles = makeStyles((theme) => ({
       padding: theme.spacing(8, 0, 6),
     },
     flexdi: {
-    //   flexDirection: 'row',
       display:'flex',
     },
     top_content: {

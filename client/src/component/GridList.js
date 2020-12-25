@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState  } from 'react';
+import React, { useEffect } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -11,9 +11,10 @@ import Flippy, { FrontSide, BackSide } from 'react-flippy';
 import axios from "axios";
 import {useSelector, useDispatch} from 'react-redux'
 import allActions from '../actions'
-import Moment from 'moment'
+import Moment, { parseTwoDigitYear } from 'moment'
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup'
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 const apiURL = "http://localhost:8000";
 
@@ -22,55 +23,97 @@ const GridList = () => {
   const currentDate = useSelector(state => state.currentBackground)
   const currentCategory = useSelector(state => state.currentCategory)
   const currentLiveData = useSelector(state => state.currentLiveData)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
-  const [bcolor1, setBColor1] = useState("secondary");
-  const [bcolor2, setBColor2] = useState("inherit");
+  const alert = useSelector(state => state.alert)
+  const currentButtonColor = useSelector(state => state.currentButtonColor)
   const dispatch = useDispatch()
 
   const fetchData = async () => {
     try {
-      setError(null);
-      setLoading(true);
-      const response = await axios.get(`${apiURL}/test`, {
-        params : {
-          datetime : Moment(currentDate.date).format('YYYY-MM-DD'),
-          cate : currentCategory.category,
-        }
-      })
-      dispatch(allActions.livedataActions.setLiveData(response.data))
+      dispatch(allActions.alertActions.setLoading(true));
+      dispatch(allActions.alertActions.setError(null));
+      dispatch(allActions.alertActions.setDateError(false));
+      const today = new Date();
+      today.setHours(today.getHours()+9);
+      if (currentDate.date.getUTCDate() === today.getUTCDate() && 
+        currentDate.date.getUTCMonth() === today.getUTCMonth() &&
+        currentDate.date.getUTCFullYear() === today.getUTCFullYear()) {
+        const response = await axios.get(`${apiURL}/cate/live_nine`, {
+          params : {
+            datetime : Moment(currentDate.date).format('YYYY-MM-DD'),
+            cate : currentCategory.category,
+          }
+        })
+        dispatch(allActions.livedataActions.setLiveData(response.data))
+      } else if((currentDate.date.getUTCDate() < today.getUTCDate() &&
+        currentDate.date.getUTCMonth() === today.getUTCMonth() &&
+        currentDate.date.getUTCFullYear() === today.getUTCFullYear()) || 
+        (currentDate.date.getUTCMonth() < today.getUTCMonth() &&
+        currentDate.date.getUTCFullYear() == today.getUTCFullYear()) ||
+        (currentDate.date.getUTCFullYear() < today.getUTCFullYear())){
+        const response = await axios.get(`${apiURL}/cate/day_nine`, {
+          params : {
+            datetime : Moment(currentDate.date).format('YYYY-MM-DD'),
+            cate : currentCategory.category,
+          }
+        })
+        dispatch(allActions.livedataActions.setLiveData(response.data))
+      } else {
+        dispatch(allActions.alertActions.setDateError(true));
+      }
     } catch(e) {
-      setError(e);
+      dispatch(allActions.alertActions.setError(e));
     }
-    setLoading(false);
+    dispatch(allActions.alertActions.setLoading(false));
   };
 
   const fetchDataAll = async () => {
     try {
-      setError(null);
-      setLoading(true);
-      const response = await axios.get(`${apiURL}/tests`, {
-        params : {
-          datetime : Moment(currentDate.date).format('YYYY-MM-DD'),
-          cate : currentCategory.category,
-        }
-      })
-      dispatch(allActions.livedataActions.setLiveDataAll(response.data))
+      dispatch(allActions.alertActions.setLoading(true));
+      dispatch(allActions.alertActions.setError(null));
+      dispatch(allActions.alertActions.setDateError(false));
+      const today = new Date();
+      today.setHours(today.getHours()+9);
+      if (currentDate.date.getUTCDate() === today.getUTCDate() &&
+      currentDate.date.getUTCMonth() === today.getUTCMonth() &&
+      currentDate.date.getUTCFullYear() === today.getUTCFullYear()) {
+        const response = await axios.get(`${apiURL}/cate/live`, {
+          params : {
+            datetime : Moment(currentDate.date).format('YYYY-MM-DD'),
+            cate : currentCategory.category,
+          }
+        })
+        dispatch(allActions.livedataActions.setLiveDataAll(response.data))
+      } else if ((currentDate.date.getUTCDate() < today.getUTCDate() &&
+        currentDate.date.getUTCMonth() === today.getUTCMonth() &&
+        currentDate.date.getUTCFullYear() === today.getUTCFullYear()) || 
+        (currentDate.date.getUTCMonth() < today.getUTCMonth() &&
+        currentDate.date.getUTCFullYear() == today.getUTCFullYear()) ||
+        (currentDate.date.getUTCFullYear() < today.getUTCFullYear())){
+        const response = await axios.get(`${apiURL}/cate/day`, {
+          params : {
+            datetime : Moment(currentDate.date).format('YYYY-MM-DD'),
+            cate : currentCategory.category,
+          }
+        })
+        dispatch(allActions.livedataActions.setLiveDataAll(response.data))
+      } else {
+        dispatch(allActions.alertActions.setDateError(true));
+      }
     } catch(e) {
-      setError(e);
+      dispatch(allActions.alertActions.setError(e));
     }
-    setLoading(false);
+    dispatch(allActions.alertActions.setLoading(false));
   };
 
   const handleClick1 = () => {
-    setBColor1("secondary");
-    setBColor2("inherit");
+    dispatch(allActions.buttoncolorActions.setNineButtonColor('secondary'));
+    dispatch(allActions.buttoncolorActions.setAllButtonColor('inherit'));
     fetchData();
   };
 
   const handleClick2 = () => {
-    setBColor1("inherit");
-    setBColor2("secondary");
+    dispatch(allActions.buttoncolorActions.setNineButtonColor('inherit'));
+    dispatch(allActions.buttoncolorActions.setAllButtonColor('secondary'));
     fetchDataAll();
   };
 
@@ -79,19 +122,33 @@ const GridList = () => {
   }, [currentDate, currentCategory]);
   
 
-  if (loading) return <div>로딩중..</div>;
-  if (error) return <div>에러가 발생했습니다.</div>;
-  if (!currentLiveData.data) return <div>데이터가 없습니다.</div>;
+  if (alert.load) return <div>로딩중..</div>;
+  if (alert.error) return <div>에러가 발생했습니다.</div>;
+  if (alert.dateerror) return(
+    <Container maxWidth="md" align="center" className={classes.alertstyle}>
+      <Alert severity="error" variant="filled" >
+        <AlertTitle>Error</AlertTitle>
+        날짜가 유효하지 않습니다. <strong>다시 선택해주시기 바랍니다.</strong>
+      </Alert>
+    </Container>
+  );
+  if (!currentLiveData.data) return (
+    <Container maxWidth="md" align="center" className={classes.alertstyle}>
+      <Alert severity="warning" variant="filled" >
+        <AlertTitle>Warning</AlertTitle>
+        데이터가 없습니다. <strong>2020년 12월 23일 이후로 다시 선택해주시기 바랍니다.</strong>
+      </Alert>
+    </Container>
+  );
 
   return (
-    
     <React.Fragment>
         <CssBaseline/>
           <main>
             <Container maxWidth="md" align="left">
               <ButtonGroup className={classes.buttongroup} variant="contained" aria-label="split button">
-                <Button color={bcolor1} onClick={handleClick1}>9개만 보기</Button>
-                <Button color={bcolor2} onClick={handleClick2}>모두 보기</Button>
+                <Button color={currentButtonColor.nine_color} onClick={handleClick1}>9개만 보기</Button>
+                <Button color={currentButtonColor.all_color} onClick={handleClick2}>모두 보기</Button>
               </ButtonGroup>
             </Container>  
             <Container className={classes.cardGrid} maxWidth="md">
@@ -128,9 +185,6 @@ const GridList = () => {
 }
 
 const useStyles = makeStyles((theme) => ({
-  icon: {
-    marginRight: theme.spacing(2),
-  },
   button: {
     marginTop: theme.spacing(1),
   },
@@ -138,21 +192,17 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
   },
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  cardMedia: {
-    paddingTop: '56.25%', // 16:9
-  },
-  cardContent: {
-    flexGrow: 1,
-  },
   buttongroup: {
     marginTop: theme.spacing(2),
-    
   },
+  alertstyle: {
+    marginTop: theme.spacing(2),
+    width: '100%',
+    alignItems: 'center',
+    '& > * + *': {
+      marginTop: theme.spacing(2),
+    },
+  }
 }));
 
 export default GridList;

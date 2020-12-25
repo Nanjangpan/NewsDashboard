@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {useSelector, useDispatch} from 'react-redux'
 import './App.css';
@@ -12,17 +12,11 @@ import Tab from '@material-ui/core/Tab';
 
 const App = () => {
   const currentCategory = useSelector(state => state.currentCategory)
-  const [category, setCategory] = useState('Hot');
   const dispatch = useDispatch()
-  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    dispatch(allActions.currentCategory.setCateIndex(newValue));
   };
-  
-  useEffect(() => {
-    dispatch(allActions.categoryActions.setCategory(category))
-  }, [category])
 
   return (
     <div className="App">
@@ -31,7 +25,7 @@ const App = () => {
         <CssBaseline/>
           <Paper>
             <Tabs
-              value={value}
+              value={currentCategory.cateindex}
               onChange={handleChange}
               indicatorColor="primary"
               textColor="primary"
@@ -39,35 +33,27 @@ const App = () => {
             >
               <Tab label="Hot" onClick={()=> {
                 dispatch(allActions.categoryActions.setCategory("Hot"));
-                setCategory("Hot");
               }}/>
               <Tab label="정치" onClick={()=> {
                 dispatch(allActions.categoryActions.setCategory("정치"));
-                setCategory("정치");
               }}/>
               <Tab label="경제" onClick={()=> {
                 dispatch(allActions.categoryActions.setCategory("경제"));
-                setCategory("경제");
               }}/>
               <Tab label="사회" onClick={()=> {
                 dispatch(allActions.categoryActions.setCategory("사회"));
-                setCategory("사회");
               }}/>
               <Tab label="생활문화" onClick={()=> {
                 dispatch(allActions.categoryActions.setCategory("생활문화"));
-                setCategory("생활문화");
               }}/>
               <Tab label="세계" onClick={()=> {
                 dispatch(allActions.categoryActions.setCategory("세계"));
-                setCategory("세계");
               }}/>
               <Tab label="IT과학" onClick={()=> {
                 dispatch(allActions.categoryActions.setCategory("IT과학"));
-                setCategory("IT과학");
               }}/>
               <Tab label="오피니언" onClick={()=> {
                 dispatch(allActions.categoryActions.setCategory("오피니언"));
-                setCategory("오피니언");
               }}/>
             </Tabs>
           </Paper>

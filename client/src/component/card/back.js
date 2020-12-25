@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 
 function Back({data}) {
   const classes = useStyles();
-
   const titleList = data;
 
   function RenderRow() {
@@ -53,12 +52,6 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     maxWidth: 300,
     backgroundColor: theme.palette.background.paper,
-  },
-  icon: {
-    marginRight: theme.spacing(2),
-  },
-  titleText: {
-    fontsize: 3
   },
 }));
 
