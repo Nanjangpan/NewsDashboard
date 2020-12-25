@@ -16,7 +16,7 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 import { Alert, AlertTitle } from '@material-ui/lab';
 
-const apiURL = "http://localhost:8000";
+const apiURL = "http://k8s-default-backingr-2cc91ca44b-1343636340.ap-northeast-2.elb.amazonaws.com";
 
 const GridList = () => {
   const classes = useStyles();
