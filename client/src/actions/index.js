@@ -5,7 +5,7 @@ import livedataActions from './livedataActions'
 const allActions = {
     categoryActions,
     backgroundActions,
-    livedataActions
+    livedataActions,
 }
 
 export default allActions

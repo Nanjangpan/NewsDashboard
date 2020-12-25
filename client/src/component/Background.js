@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {NAVER_COLOR} from '../models/colors';
-import ReactWordcloud from 'react-wordcloud';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import {WORD} from './Word';
@@ -71,8 +70,7 @@ function Background(){
                     <div>
                       <Typography align='right' color="textSecondary">오후 8시 30분 업데이트</Typography>
                     </div>
-                </Container>
-                
+                </Container>              
             </div>
         </main>
         </>
