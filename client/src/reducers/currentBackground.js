@@ -5,6 +5,11 @@ const currentBackground = (state = {}, action) => {
                 ...state,
                 date: action.payload
             }
+        case "SET_WORD":
+            return {
+                ...state,
+                word: action.payload
+            }
         default:
             return state
     }

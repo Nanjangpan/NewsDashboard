@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -13,9 +13,6 @@ const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const GridList = ({category}) => {
   const classes = useStyles();
   const [currentCategory, setCategory] = useState('Hot');
-  const [datetime, setDatetime] = useState('20201202');
-  const [image_url, setImage_url] = useState(null);
-  const [title, setTitle] = useState(null);
 
   return (
     <React.Fragment>
@@ -34,13 +31,13 @@ const GridList = ({category}) => {
                       // and other props, which will go to div
                       // these are optional style, it is not necessary
                     >
-                      <FrontSide>
-                        <Front />
-                      </FrontSide>
-                      <BackSide>
-                        <Back />
-                      </BackSide>
-                    </Flippy>
+                    <FrontSide>
+                      <Front />
+                    </FrontSide>
+                    <BackSide>
+                      <Back />
+                    </BackSide>
+                  </Flippy>
                   </Grid>
                 ))}
               </Grid>          
