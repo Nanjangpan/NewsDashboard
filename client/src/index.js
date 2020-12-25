@@ -8,6 +8,7 @@ import {createStore} from 'redux';
 import rootReducer from './reducers';
 import {Provider} from 'react-redux';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+import {NAVER_COLOR} from './models/colors';
 
 const store = createStore(
     rootReducer,
@@ -17,6 +18,11 @@ const store = createStore(
 const theme= createMuiTheme({
     typography: {
         fontFamily: 'NanumSquare',
+    },
+    palette: {
+        primary: {
+            main: NAVER_COLOR,
+        },
     }
 });
 
