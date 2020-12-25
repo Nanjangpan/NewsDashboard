@@ -477,6 +477,10 @@ async def custom_http_exception_handler(request, exc):
     return RedirectResponse("/")
 #에러뜰경우 root로
 
+@app.get("/tests")
+async def gogos(datetime:str,cate:str="Hot"):
+    return Hot_live_Data
+
 @app.get("/test")
 async def gogo(datetime:str,cate:str="Hot",deleteItem:str=False):
     result=[]
