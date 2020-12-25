@@ -6,6 +6,7 @@ COPY package.json ./
 
 RUN npm install -g npm@6.14.6
 RUN npm install
+RUN npm install @material-ui/lab --save
 
 COPY ./ ./
 
