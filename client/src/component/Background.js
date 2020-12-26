@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -14,7 +14,6 @@ import Moment from 'react-moment';
 import {useSelector, useDispatch} from 'react-redux'
 import allActions from '../actions'
 import Image from 'material-ui-image';
-import ReactWordcould from 'react-wordcloud';
 
 const apiURL = "http://k8s-default-backingr-2cc91ca44b-1343636340.ap-northeast-2.elb.amazonaws.com";
 
@@ -22,6 +21,7 @@ function Background(){
   const classes = useStyles(); 
   const currentBackground = useSelector(state => state.currentBackground)
   const dispatch = useDispatch()
+  const [error, setError] = useState(false);
   var day = new Date();
   
   const options = {
@@ -32,6 +32,7 @@ function Background(){
   
   const wordCloudData = async () => {
     try {
+      setError(false);
       const today = new Date();
       today.setHours(today.getHours()+9);
       if (currentBackground.date.getUTCDate() === today.getUTCDate() && 
@@ -56,7 +57,8 @@ function Background(){
         })
         dispatch(allActions.backgroundActions.setWord(response.data))
       } else {
-        dispatch(allActions.alertActions.setWord([{'text': '', 'value': 0}]));
+        setError(true); 
+        dispatch(allActions.backgroundActions.setWord(null));
       }
     } catch(e) {
       console.log("워드 클라우드를 가져오는 데 실패했습니다.")
@@ -67,6 +69,8 @@ function Background(){
     dispatch(allActions.backgroundActions.setDate(day))
     wordCloudData();
   }, [])
+
+  // if (error) return <div>워드 클라우드가 존재하지 않습니다.</div>;
 
   return(
     <>
@@ -85,7 +89,7 @@ function Background(){
                           Just Ten Minute
                       </Typography>
                       <div className={classes.wc}>
-                        <ReactWordcould words={currentBackground.word} options={options}/>
+                        <Image src={currentBackground.word} aspectRatio={(16/9)} disableSpinner/>   
                       </div>
                   </Container>
                   <Container className={classes.second_content}>
