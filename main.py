@@ -34,16 +34,28 @@ async def custom_http_exception_handler(request, exc):
     return RedirectResponse("/")
 #에러뜰경우 root로
 
-# @app.get("/")
-
-
+@app.get("/time/live/")
+async def time_live():
+    db = client['Real_time_Result']
+    cols=db.list_collection_names()     
+    col_list=[]
+    for i in cols:
+        col_list.append(i)
+    col_list.sort()
+    datetime=col_list[len(col_list)-1]
+    # 20201212_98
+    a=int(datetime[9:])*10
+    hour=(a//60)
+    a=a%60
+    minute=a
+    return hour+"시 "+minute+"분 업데이트"
 
 
 @app.get("/cate/live/")
 async def cate_live(datetime: str, cate: str="Hot"):
     cate=categories[cate]
     db = client['Real_time_Result']
-    cols=db.list_collection_names()
+    cols=db.list_collection_names()     
     col_list=[]
     for i in cols:
         col_list.append(i)
@@ -54,7 +66,7 @@ async def cate_live(datetime: str, cate: str="Hot"):
     result=[]
     for i in range(len(item[cate])):
         cur={}
-        main_id=item[cate][str(i)]["id"][0]
+        main_id=str(item[cate][str(i)]["id"][0])
         db=client['Info']
         main_news=db["Info"].find({"id":main_id})[0]
         cur['cluster_num']=i
@@ -62,12 +74,12 @@ async def cate_live(datetime: str, cate: str="Hot"):
         cur["title"]=main_news["title"]
         cur["url"]=main_news["url"]
         cur["press"]=main_news["press"]
-        cur["keyword"]=item[cate][str(i)]["keyword_list"]
+        cur["keyword"]=item[cate][str(i)]["keywords"]
         cur["title_list"]=[]
         for now_id in item[cate][str(i)]["id"]:
             print(now_id)
             now_dic={}
-            now_news=db["Info"].find({"id":now_id})[0]
+            now_news=db["Info"].find({"id":str(now_id)})[0]
             now_dic["title"]=now_news["title"]
             now_dic["url"]=now_news["url"]
             now_dic["press"]=now_news["press"]
@@ -94,7 +106,7 @@ async def cate_live_nine(datetime:str,cate:str="Hot"):
         if num==10:
             break
         cur={}
-        main_id=item[cate][str(i)]["id"][0]
+        main_id=str(item[cate][str(i)]["id"][0])
         db=client['Info']
         main_news=db["Info"].find({"id":main_id})[0]
         cur['cluster_num']=i
@@ -102,12 +114,12 @@ async def cate_live_nine(datetime:str,cate:str="Hot"):
         cur["title"]=main_news["title"]
         cur["url"]=main_news["url"]
         cur["press"]=main_news["press"]
-        cur["keyword"]=item[cate][str(i)]["keyword_list"]
+        cur["keyword"]=item[cate][str(i)]["keywords"]
         cur["title_list"]=[]
         for now_id in item[cate][str(i)]["id"]:
             print(now_id)
             now_dic={}
-            now_news=db["Info"].find({"id":now_id})[0]
+            now_news=db["Info"].find({"id":str(now_id)})[0]
             now_dic["title"]=now_news["title"]
             now_dic["url"]=now_news["url"]
             now_dic["press"]=now_news["press"]
@@ -127,7 +139,7 @@ async def cate_day(datetime:str,cate:str="Hot"):
     result=[]
     for i in range(len(item[cate])):
         cur={}
-        main_id=item[cate][str(i)]["id"][0]
+        main_id=str(item[cate][str(i)]["id"][0])
         db=client['Info']
         main_news=db["Info"].find({"id":main_id})[0]
         cur['cluster_num']=i
@@ -135,12 +147,12 @@ async def cate_day(datetime:str,cate:str="Hot"):
         cur["title"]=main_news["title"]
         cur["url"]=main_news["url"]
         cur["press"]=main_news["press"]
-        cur["keyword"]=item[cate][str(i)]["keyword_list"]
+        cur["keyword"]=item[cate][str(i)]["keywords"]
         cur["title_list"]=[]
         for now_id in item[cate][str(i)]["id"]:
             print(now_id)
             now_dic={}
-            now_news=db["Info"].find({"id":now_id})[0]
+            now_news=db["Info"].find({"id":str(now_id)})[0]
             now_dic["title"]=now_news["title"]
             now_dic["url"]=now_news["url"]
             now_dic["press"]=now_news["press"]
@@ -162,7 +174,7 @@ async def cate_day_nine(datetime:str,cate:str="Hot"):
         if num==10:
             break
         cur={}
-        main_id=item[cate][str(i)]["id"][0]
+        main_id=str(item[cate][str(i)]["id"][0])
         db=client['Info']
         main_news=db["Info"].find({"id":main_id})[0]
         cur['cluster_num']=i
@@ -170,12 +182,12 @@ async def cate_day_nine(datetime:str,cate:str="Hot"):
         cur["title"]=main_news["title"]
         cur["url"]=main_news["url"]
         cur["press"]=main_news["press"]
-        cur["keyword"]=item[cate][str(i)]["keyword_list"]
+        cur["keyword"]=item[cate][str(i)]["keywords"]
         cur["title_list"]=[]
         for now_id in item[cate][str(i)]["id"]:
             print(now_id)
             now_dic={}
-            now_news=db["Info"].find({"id":now_id})[0]
+            now_news=db["Info"].find({"id":str(now_id)})[0]
             now_dic["title"]=now_news["title"]
             now_dic["url"]=now_news["url"]
             now_dic["press"]=now_news["press"]
