@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {useSelector, useDispatch} from 'react-redux'
 import './App.css';
@@ -13,9 +13,10 @@ import Tab from '@material-ui/core/Tab';
 const App = () => {
   const currentCategory = useSelector(state => state.currentCategory)
   const dispatch = useDispatch()
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
-    dispatch(allActions.currentCategory.setCateIndex(newValue));
+    setValue(newValue);
   };
 
   return (
@@ -25,7 +26,7 @@ const App = () => {
         <CssBaseline/>
           <Paper>
             <Tabs
-              value={currentCategory.cateindex}
+              value={value}
               onChange={handleChange}
               indicatorColor="primary"
               textColor="primary"
