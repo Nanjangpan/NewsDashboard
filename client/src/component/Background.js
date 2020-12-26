@@ -56,7 +56,7 @@ function Background(){
         })
         dispatch(allActions.backgroundActions.setWord(response.data))
       } else {
-        dispatch(allActions.alertActions.setWord(null));
+        dispatch(allActions.alertActions.setWord([{'text': '', 'value': 0}]));
       }
     } catch(e) {
       console.log("워드 클라우드를 가져오는 데 실패했습니다.")
@@ -85,7 +85,7 @@ function Background(){
                           Just Ten Minute
                       </Typography>
                       <div className={classes.wc}>
-                        <ReactWordcould words={wordCloudData} options={options}/>
+                        <ReactWordcould words={currentBackground.word} options={options}/>
                       </div>
                   </Container>
                   <Container className={classes.second_content}>
