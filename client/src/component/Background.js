@@ -18,9 +18,8 @@ import wordCloud1 from '../app/image/1.png'
 import wordCloud2 from '../app/image/2.png'
 import wordCloud3 from '../app/image/3.png'
 import wordCloud4 from '../app/image/4.png'
-import wordCloud5 from '../app/image/5.png'
 
-const img = [wordCloud1, wordCloud2, wordCloud3, wordCloud4, wordCloud5];
+const img = [wordCloud1, wordCloud2, wordCloud3, wordCloud4];
 
 const apiURL = "http://k8s-default-backingr-2cc91ca44b-1343636340.ap-northeast-2.elb.amazonaws.com";
 
@@ -88,7 +87,7 @@ function Background(){
                           Just Ten Minute
                       </Typography>
                       <div className={classes.wc}>
-                        <Image src={img[random]} aspectRatio={(16/9)} disableSpinner/>   
+                        <Image src={img[random]} disableSpinner/>   
                       </div>
                   </Container>
                   <Container className={classes.second_content}>
