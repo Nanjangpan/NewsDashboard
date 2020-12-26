@@ -32,6 +32,7 @@ const GridList = () => {
       dispatch(allActions.alertActions.setLoading(true));
       dispatch(allActions.alertActions.setError(null));
       dispatch(allActions.alertActions.setDateError(false));
+      dispatch(allActions.livedataActions.setLiveTime(''))
       const today = new Date();
       today.setHours(today.getHours()+9);
       if (currentDate.date.getUTCDate() === today.getUTCDate() && 
@@ -43,7 +44,9 @@ const GridList = () => {
             cate : currentCategory.category,
           }
         })
+        const response_time = await axios.get(`${apiURL}/time/live`)
         dispatch(allActions.livedataActions.setLiveData(response.data))
+        dispatch(allActions.livedataActions.setLiveTime(response_time.data))
       } else if((currentDate.date.getUTCDate() < today.getUTCDate() &&
         currentDate.date.getUTCMonth() === today.getUTCMonth() &&
         currentDate.date.getUTCFullYear() === today.getUTCFullYear()) || 
@@ -82,7 +85,9 @@ const GridList = () => {
             cate : currentCategory.category,
           }
         })
-        dispatch(allActions.livedataActions.setLiveDataAll(response.data))
+        const response_time = await axios.get(`${apiURL}/time/live`)
+        dispatch(allActions.livedataActions.setLiveData(response.data))
+        dispatch(allActions.livedataActions.setLiveTime(response_time.data))
       } else if ((currentDate.date.getUTCDate() < today.getUTCDate() &&
         currentDate.date.getUTCMonth() === today.getUTCMonth() &&
         currentDate.date.getUTCFullYear() === today.getUTCFullYear()) || 
