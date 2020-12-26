@@ -20,8 +20,8 @@ const apiURL = "http://k8s-default-backingr-2cc91ca44b-1343636340.ap-northeast-2
 function Background(){
   const classes = useStyles(); 
   const currentBackground = useSelector(state => state.currentBackground)
+  const currentLiveData = useSelector(state => state.currentLiveData)
   const dispatch = useDispatch()
-  const [error, setError] = useState(false);
   var day = new Date();
   
   const options = {
@@ -32,7 +32,6 @@ function Background(){
   
   const wordCloudData = async () => {
     try {
-      setError(false);
       const today = new Date();
       today.setHours(today.getHours()+9);
       if (currentBackground.date.getUTCDate() === today.getUTCDate() && 
@@ -57,7 +56,6 @@ function Background(){
         })
         dispatch(allActions.backgroundActions.setWord(response.data))
       } else {
-        setError(true); 
         dispatch(allActions.backgroundActions.setWord(null));
       }
     } catch(e) {
@@ -69,8 +67,6 @@ function Background(){
     dispatch(allActions.backgroundActions.setDate(day))
     wordCloudData();
   }, [])
-
-  // if (error) return <div>워드 클라우드가 존재하지 않습니다.</div>;
 
   return(
     <>
@@ -106,7 +102,7 @@ function Background(){
                     </Typography>  
                   </div>
                   <div>
-                    <Typography align='right' color="textSecondary">오후 8시 30분 업데이트</Typography>
+                    <Typography align='right' color="textSecondary">{currentLiveData.time}</Typography>
                   </div>
               </Container>              
           </div>

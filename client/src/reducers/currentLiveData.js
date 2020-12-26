@@ -10,6 +10,11 @@ const currentLiveData = (state = {}, action) => {
                 ...state,
                 data: action.data,
             }
+        case "SET_LIVE_TIME":
+            return {
+                ...state,
+                time: action.time
+            }
         default:
             return state
     }

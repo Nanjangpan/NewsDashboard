@@ -11,7 +11,15 @@ const setLiveDataAll = (data) => {
         data: data
     }
 }
+
+const setLiveTime = (time) => {
+    return {
+        type: "SET_LIVE_TIME",
+        time: time
+    }
+}
 export default {
     setLiveData,
-    setLiveDataAll
+    setLiveDataAll,
+    setLiveTime
 }
