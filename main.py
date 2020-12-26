@@ -48,7 +48,7 @@ async def time_live():
     hour=(a//60)
     a=a%60
     minute=a
-    return {"date":hour+"시 "+minute+"분 업데이트"}
+    return hour+"시 "+minute+"분 업데이트"
 
 
 @app.get("/cate/live/")
