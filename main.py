@@ -29,12 +29,12 @@ categories = {'정치': '100', '경제': '101', '사회': '102', '생활문화':
 async def root():
    return { "message" : "Hello World" }
 
-@app.exception_handler(StarletteHTTPException)
-async def custom_http_exception_handler(request, exc):
-    return RedirectResponse("/")
+# @app.exception_handler(StarletteHTTPException)
+# async def custom_http_exception_handler(request, exc):
+#     return RedirectResponse("/")
 #에러뜰경우 root로
 
-@app.get("/time/live/")
+@app.get("/time/live")
 async def time_live():
     db = client['Real_time_Result']
     cols=db.list_collection_names()     
@@ -48,7 +48,7 @@ async def time_live():
     hour=(a//60)
     a=a%60
     minute=a
-    return hour+"시 "+minute+"분 업데이트"
+    return {date:hour+"시 "+minute+"분 업데이트"}
 
 
 @app.get("/cate/live/")
