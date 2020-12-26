@@ -14,7 +14,7 @@ const Front = ({data}) => {
     <Card className={classes.card}>
       <CardMedia
         className={classes.cardMedia}
-        image={data.image_url}
+        image={data.img_url}
       />
       <CardContent className={classes.cardContent}>
         <a href={data.url} target="_blank">
