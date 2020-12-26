@@ -14,6 +14,7 @@ import Moment from 'react-moment';
 import {useSelector, useDispatch} from 'react-redux'
 import allActions from '../actions'
 import Image from 'material-ui-image';
+import ReactWordcould from 'react-wordcloud';
 
 const apiURL = "http://k8s-default-backingr-2cc91ca44b-1343636340.ap-northeast-2.elb.amazonaws.com";
 
@@ -22,6 +23,12 @@ function Background(){
   const currentBackground = useSelector(state => state.currentBackground)
   const dispatch = useDispatch()
   var day = new Date();
+  
+  const options = {
+    rotations: 2,
+    rotationAngles: [0, 0],
+    fontSizes:[50,100],
+  };
   
   const wordCloudData = async () => {
     try {
@@ -78,7 +85,7 @@ function Background(){
                           Just Ten Minute
                       </Typography>
                       <div className={classes.wc}>
-                        <Image src={currentBackground.word} aspectRatio={(16/9)} disableSpinner/>
+                        <ReactWordcould words={wordCloudData} options={options}/>
                       </div>
                   </Container>
                   <Container className={classes.second_content}>
