@@ -14,6 +14,13 @@ import Moment from 'react-moment';
 import {useSelector, useDispatch} from 'react-redux'
 import allActions from '../actions'
 import Image from 'material-ui-image';
+import wordCloud1 from '../app/image/1.png'
+import wordCloud2 from '../app/image/2.png'
+import wordCloud3 from '../app/image/3.png'
+import wordCloud4 from '../app/image/4.png'
+import wordCloud5 from '../app/image/5.png'
+
+const img = [wordCloud1, wordCloud2, wordCloud3, wordCloud4, wordCloud5];
 
 const apiURL = "http://k8s-default-backingr-2cc91ca44b-1343636340.ap-northeast-2.elb.amazonaws.com";
 
@@ -23,13 +30,8 @@ function Background(){
   const currentLiveData = useSelector(state => state.currentLiveData)
   const dispatch = useDispatch()
   var day = new Date();
-  
-  const options = {
-    rotations: 2,
-    rotationAngles: [0, 0],
-    fontSizes:[50,100],
-  };
-  
+  const [random, setRandom] = useState(0);
+
   const wordCloudData = async () => {
     try {
       const today = new Date();
@@ -66,6 +68,7 @@ function Background(){
   useEffect(() => {
     dispatch(allActions.backgroundActions.setDate(day))
     wordCloudData();
+    setRandom(Math.floor(Math.random() * img.length));
   }, [])
 
   return(
@@ -85,7 +88,7 @@ function Background(){
                           Just Ten Minute
                       </Typography>
                       <div className={classes.wc}>
-                        <Image src={currentBackground.word} aspectRatio={(16/9)} disableSpinner/>   
+                        <Image src={img[random]} aspectRatio={(16/9)} disableSpinner/>   
                       </div>
                   </Container>
                   <Container className={classes.second_content}>
