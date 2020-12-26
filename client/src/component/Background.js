@@ -68,7 +68,7 @@ function Background(){
     dispatch(allActions.backgroundActions.setDate(day))
     wordCloudData();
     setRandom(Math.floor(Math.random() * img.length));
-  }, [])
+  }, [random])
 
   return(
     <>
