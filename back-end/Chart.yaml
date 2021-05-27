@@ -1,0 +1,7 @@
+apiVersion: v1
+name: back
+description: back-end of Just10Minutes
+
+type: application
+version: "0.1.0"
+appVersion: "0.1.0"
