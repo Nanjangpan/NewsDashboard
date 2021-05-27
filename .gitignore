@@ -127,3 +127,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+<<<<<<< HEAD
+.idea/
+=======
+.DS_Store
+.idea/
+crawling_test.ipynb
+>>>>>>> eks
+
+crawling_test.ipynb

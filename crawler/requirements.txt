@@ -1,0 +1,30 @@
+<<<<<<< HEAD
+fastapi==0.60.1
+uvicorn==0.11.8
+pydantic==1.7.3
+pymongo==3.11.2
+starlette==0.13.6
+gunicorn
+gunicorn
+boto3
+shortuuid
+pyyaml
+
+=======
+async-timeout==3.0.1
+attrs==20.3.0
+beautifulsoup4==4.9.3
+boto3
+bs4==0.0.1
+httptools==0.1.1
+jmespath==0.10.0
+multidict==5.1.0
+psycopg2-binary==2.8.6
+pydantic==1.7.3
+PyYAML==5.3.1
+requests==2.25.0
+s3fs
+typing-extensions==3.7.4.3
+redis==3.5.3
+pandas==1.0.1
+>>>>>>> crawling

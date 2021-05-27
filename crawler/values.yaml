@@ -1,0 +1,5 @@
+cpuRequests: 1000m
+cpuLimits: 3000m
+
+memoryRequests: 1000Mi
+memoryLimits: 1000Mi
